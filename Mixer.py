@@ -10,7 +10,10 @@ class Mixer:
         self.columns = []
         self.delimiter = ','
 
-    def add_column(self, source_list):
+    def add_column(self, source_list,name=None):
+        if name is not None:
+            for i in range(len(source_list)):
+                source_list[i]='"'+name+'"'+':'+'"'+source_list[i]+'"'
         self.columns.append(source_list)
 
     def set_delimiter(self, delimiter):
@@ -22,6 +25,15 @@ class Mixer:
             if id % 100000 == 0:
                 logging.warning("%s generated" % id)
             line = self.delimiter.join(random.choice(list) for list in self.columns)
+            result.append(line)
+        return result
+
+    def json(self, number_of_records=30):
+        result = []
+        self.delimiter = ','
+        for id in range(number_of_records):
+            line = self.delimiter.join(random.choice(list) for list in self.columns)
+            line = '{'+line+'}'+'\n'
             result.append(line)
         return result
 
